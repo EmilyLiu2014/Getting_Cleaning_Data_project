@@ -1,0 +1,63 @@
+### Introduction
+
+This course project assignment will require to collect, work with and clean a tidy data set in R for later analysis. 
+
+The raw data is human activity recognition using smartphones. The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. 
+
+#### The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. There are 7 raw data sets structure as following:
+
+1. './features.txt': List of all variables.
+
+2. './train/X_train.txt': Training set.
+
+3. './test/X_test.txt': Test set.
+
+4. './train/subject_train.txt': Performer ID for each record of training set
+
+5. './test/subject_test.txt': Performer ID for each record of test set
+
+6. './train/y_train.txt': Activity type for each record of training set.
+
+7. './test/y_test.txt': Activity type for each record of test set.
+ 
+
+#### To achieve the tidy data set, the R script called run_analysis.r that does the following:
+
+1. Read in all 7 raw data set in data-frame by using read.table(). Those 7 data.frame named are varData, tnData, ttData, tnSubject, ttSubject, tnLable, ttLable
+
+2. To prepare the data set merge, some columns' name need to be rename:
+	- Rename the V1 column name to Activity for tnLable and ttLable
+      - Rename the V1 column name to PerformerID for tnSubject and ttSubject
+
+3. Modify the tnData and ttData columns' name to descriptive variable names based on './features.txt' (varData)
+
+4. Merge the training (tnData) and test (ttData) data set to create one data set, named HARdata. This merged data set contains 10299 rows and 563 columns. 
+
+5. Since the project only requires the mean and standard deviation for each measurement, the script extracts the HARdata data set with column name contains 'mean' and 'std', also 'PerformerID' and 'Activity' column as well. 
+	- The new data set is called mean_std_HARdata with 10299 rows and 81 columns. 
+
+6. Add the descriptive activity names to name the activities in the mean_std_HARdata. 
+	- Based on 'activity_labels.txt' information(WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING), use the for loop to match the activity number with appropriate description and add to new column 'DescrActivity' in mean_std_HARdata
+
+7. Create a new tidy data set with average of each variable for each activity ('Activity') and each subject ('PerformerID') from mean_std_HARdata
+	- use 'aggregate' function to compute mean of each column group by 'Activity' and 'PerformerID', and return a new tidy data set called resultdata data set. 
+	- Since the column 'DescrActivity' in mean_std_HARdata is character type, statistic calculation is not allowed in this column. Thus, this column is not selected in 'aggregate', and add back to new tidy data set resultdata by using for loop
+	- the new data set resultdata has 180 rows and 84 columns
+
+8. Clean the resultdata data set
+	- Since the 'PerformerID.Group' and 'Activity.Group' columns are duplicated with 'SubjectID' and 'Activity', remove them from the resultdata
+	- the final data set resultdata has 180 rows and 82 columns.
+
+9. output the resultdata to a text file 'projectResult.txt'
+
+
+### This project includes following files:
+
+1. 'run_analysis.r": R script to product the tidy data set 'resultdata' with above 9 steps.
+
+2. 'README': describe this project assignment, analysis procedure, input files and output results
+
+3. 'projectResult.txt': output result of 'resultdata' in text format
+
+4. 'CodeBook.md': describe the varaibles, the data for the data set
+
